@@ -17,6 +17,12 @@ app.use(express.json());
 connectDB();
 
 // Routes
+app.use("/api/students", require("./routes/students"));
+app.use("/api/applications", require("./routes/applications"));
+app.use("/api/documents", require("./routes/documents"));
+app.use("/api/payments", require("./routes/payments"));
+
+// API helth check
 app.get("/api-health", (req, res) => {
   res.json({ message: "Welcome to College Management System API" });
 });

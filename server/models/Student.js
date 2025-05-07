@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { STUDENT_STATUS } = require("../constants");
 
 const studentSchema = new mongoose.Schema({
   studentId: {
@@ -29,13 +30,14 @@ const studentSchema = new mongoose.Schema({
     trim: true,
   },
   department: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Department",
     required: [true, "Department is required"],
-    enum: ["CSE", "BBA", "EEE", "English", "Others"],
   },
   subjects: [
     {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subject",
     },
   ],
   admissionDate: {
@@ -52,8 +54,13 @@ const studentSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["active", "inactive"],
-    default: "active",
+    enum: Object.values(STUDENT_STATUS),
+    default: STUDENT_STATUS.ACTIVE,
+  },
+  academicYear: {
+    type: String,
+    required: [true, "Academic year is required"],
+    trim: true,
   },
   createdAt: {
     type: Date,

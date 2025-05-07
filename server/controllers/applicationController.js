@@ -1,24 +1,29 @@
 const Application = require("../models/Application");
 const Payment = require("../models/Payment");
 const ActionLog = require("../models/ActionLog");
+const {
+  APPLICATION_STATUS,
+  PAYMENT_TYPE,
+  PAYMENT_STATUS,
+} = require("../constants");
 
 const createApplication = async (req, res) => {
   try {
-    const { studentId, applicationFeeId } = req.body;
+    const { preStudentId, applicationFeeId } = req.body;
 
     // Verify payment
     const payment = await Payment.findById(applicationFeeId);
     if (
       !payment ||
-      payment.type !== "application_fee" ||
-      payment.status !== "completed"
+      payment.type !== PAYMENT_TYPE.APPLICATION_FEE ||
+      payment.status !== PAYMENT_STATUS.COMPLETED
     ) {
       return res.status(400).json({
         message: "Invalid or incomplete application fee payment",
       });
     }
     const application = new Application({
-      student: studentId,
+      student: preStudentId,
       applicationFee: applicationFeeId,
     });
     await application.save();
@@ -43,7 +48,7 @@ const reviewApplication = async (req, res) => {
     const actionLog = new ActionLog({
       admin: req.user.id, // Assuming admin is authenticated
       application: application._id,
-      action: status === "rejected" ? "rejected" : "reviewed",
+      action: status === APPLICATION_STATUS.REJECTED ? "rejected" : "reviewed",
       details: remarks,
     });
     await actionLog.save();
@@ -56,7 +61,7 @@ const reviewApplication = async (req, res) => {
 const getApplicationStatus = async (req, res) => {
   try {
     const application = await Application.findById(req.params.id).populate(
-      "student"
+      "preStudent"
     );
     if (!application) {
       return res.status(404).json({ message: "Application not found" });

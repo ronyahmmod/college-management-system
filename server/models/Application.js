@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
+const { APPLICATION_STATUS } = require("../constants");
 
 const applicationShema = new mongoose.Schema({
-  student: {
+  preStudent: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Student",
-    required: [true, "Student ID is required"],
+    ref: "PreStudent",
+    required: [true, "PreStudent ID is required"],
   },
   applicationFee: {
     type: mongoose.Schema.Types.ObjectId,
@@ -13,8 +14,8 @@ const applicationShema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "under_review", "approved", "rejected", "completed"],
-    default: "pending",
+    enum: Object.values(APPLICATION_STATUS),
+    default: APPLICATION_STATUS.PENDING,
   },
   remarks: {
     type: String,

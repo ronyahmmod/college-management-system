@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { DOCUMENT_TYPE } = require("../constants");
 
 const documentShema = new mongoose.Schema({
   application: {
@@ -12,7 +13,7 @@ const documentShema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["photo", "certificate", "transcript", "others"],
+    enum: Object.values(DOCUMENT_TYPE),
     recuired: [true, "Document type is required"],
   },
   url: {

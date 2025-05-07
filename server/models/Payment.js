@@ -1,4 +1,9 @@
 const mongoose = require("mongoose");
+const {
+  PAYMENT_TYPE,
+  PAYMEENT_METHOD,
+  PAYMENT_STATUS,
+} = require("../constants");
 
 const paymentSchema = new mongoose.Schema({
   student: {
@@ -11,6 +16,11 @@ const paymentSchema = new mongoose.Schema({
     ref: "Application",
     required: [true, "Application ID is required"],
   },
+  feeCategory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "FeeCategory",
+    required: [true, "Fee category is required"],
+  },
   amount: {
     type: Number,
     required: [true, "Amount is required"],
@@ -18,7 +28,7 @@ const paymentSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["application_fee", "admission_fee"],
+    enum: Object.values(PAYMENT_TYPE),
     required: [true, "Payment type is required"],
   },
   transactionId: {
@@ -28,13 +38,18 @@ const paymentSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    enum: ["bkash", "rocket", "nagad", "bank"],
+    enum: Object.values(PAYMEENT_METHOD),
     required: [true, "Payment method is required"],
   },
   status: {
     type: String,
-    enum: ["pending", "completed", "failed"],
-    default: "pending",
+    enum: Object.values(PAYMENT_STATUS),
+    default: PAYMENT_STATUS.PENDING,
+  },
+  academicYear: {
+    type: String,
+    required: [true, "Academic year is required"],
+    trim: true,
   },
   paymentDate: {
     type: Date,

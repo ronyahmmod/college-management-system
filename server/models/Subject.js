@@ -18,6 +18,20 @@ const subjectSchema = new mongoose.Schema({
     ref: "Department",
     required: [true, "Department is required"],
   },
+  papers: [
+    {
+      name: {
+        type: String,
+        required: [true, "Paper name is required"],
+        trim: true,
+      },
+      code: {
+        type: String,
+        required: [true, "Paper code is required"],
+        trim: true,
+      },
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,

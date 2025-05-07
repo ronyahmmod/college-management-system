@@ -42,4 +42,10 @@ module.exports = {
     REJECTED: "rejected",
     COMMENTED: "commented",
   },
+  RESULT_TYPE: {
+    MIDTERM: "midterm",
+    FINAL: "final",
+    QUIZ: "quiz",
+    OTHER: "other",
+  },
 };

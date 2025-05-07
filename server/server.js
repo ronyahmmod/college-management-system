@@ -21,6 +21,7 @@ app.use("/api/students", require("./routes/students"));
 app.use("/api/applications", require("./routes/applications"));
 app.use("/api/documents", require("./routes/documents"));
 app.use("/api/payments", require("./routes/payments"));
+app.use("/api/results", require("./routes/results"));
 
 // API helth check
 app.get("/api-health", (req, res) => {

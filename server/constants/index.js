@@ -58,4 +58,9 @@ module.exports = {
     LATE: "late",
     EXCUSED: "excused",
   },
+  USER_TYPE: {
+    STUDENT: "student",
+    TEACHER: "teacher",
+    ADMIN: "admin",
+  },
 };

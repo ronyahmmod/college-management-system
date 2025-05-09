@@ -13,6 +13,8 @@
     "concurrently": "^7.6.0"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
     "sslcommerz-lts": "^1.1.0"
   }
 }

@@ -4,8 +4,14 @@ const {
   createResultPublication,
   publishResult,
 } = require("../controllers/resultPublicationController");
+const { authMiddleware, restrictTo } = require("../middleware/auth");
 
-router.post("/", createResultPublication);
-router.patch("/:id/publish", publishResult);
+router.post("/", authMiddleware, restrictTo("admin"), createResultPublication);
+router.patch(
+  "/:id/publish",
+  authMiddleware,
+  restrictTo("admin"),
+  publishResult
+);
 
 module.exports = router;

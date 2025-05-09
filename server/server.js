@@ -17,6 +17,7 @@ app.use(express.json());
 connectDB();
 
 // Routes
+app.use("/api/auth", require("./routes/auth"));
 app.use("/api/students", require("./routes/students"));
 app.use("/api/applications", require("./routes/applications"));
 app.use("/api/documents", require("./routes/documents"));

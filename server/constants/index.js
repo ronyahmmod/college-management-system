@@ -48,4 +48,14 @@ module.exports = {
     QUIZ: "quiz",
     OTHER: "other",
   },
+  RESULT_STATUS: {
+    DRAFT: "draft",
+    PUBLISHED: "published",
+  },
+  ATTENDANCE_STATUS: {
+    PRESENT: "present",
+    ABSENT: "absent",
+    LATE: "late",
+    EXCUSED: "excused",
+  },
 };

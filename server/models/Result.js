@@ -12,6 +12,11 @@ const resultSchema = new mongoose.Schema({
     ref: "Subject",
     required: [true, "Subject ID is required"],
   },
+  teacher: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Teacher",
+    required: [true, "Teacher ID is required"],
+  },
   academicYear: {
     type: String,
     required: [true, "Academic year is required"],
@@ -50,6 +55,23 @@ const resultSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+
+resultSchema.pre("save", function (next) {
+  this.totalMarks = this.papers.reduce((sum, paper) => sum + paper.marks, 0);
+  // Calculate grade based on total marks
+  if (this.totalMarks >= 80) this.grade = "A+";
+  else if (this.totalMarks >= 70) this.grade = "A";
+  else if (this.totalMarks >= 60) this.grade = "A-";
+  else if (this.totalMarks >= 55) this.grade = "B+";
+  else if (this.totalMarks >= 50) this.grade = "B";
+  else if (this.totalMarks >= 45) this.grade = "B-";
+  else if (this.totalMarks >= 40) this.grade = "C+";
+  else if (this.totalMarks >= 35) this.grade = "C";
+  else if (this.totalMarks >= 30) this.grade = "C-";
+  else if (this.totalMarks >= 20) this.grade = "D";
+  else this.grade = "F";
+  next();
 });
 
 module.exports = mongoose.model("Result", resultSchema);

@@ -22,6 +22,9 @@ app.use("/api/applications", require("./routes/applications"));
 app.use("/api/documents", require("./routes/documents"));
 app.use("/api/payments", require("./routes/payments"));
 app.use("/api/results", require("./routes/results"));
+app.use("/api/teachers", require("./routes/teachers"));
+app.use("/api/attendances", require("./routes/attendances"));
+app.use("/api/result-publications", require("./routes/resultPublications"));
 
 // API helth check
 app.get("/api-health", (req, res) => {

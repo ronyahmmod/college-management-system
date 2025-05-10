@@ -1,18 +1,6 @@
 const mongoose = require("mongoose");
-const { STUDENT_STATUS } = require("../constants");
 
 const studentSchema = new mongoose.Schema({
-  studentId: {
-    type: String,
-    required: [true, "Student ID is required"],
-    unique: true,
-    trim: true,
-  },
-  rollNumber: {
-    type: String,
-    unique: true,
-    trim: true,
-  },
   name: {
     type: String,
     required: [true, "Name is required"],
@@ -20,11 +8,19 @@ const studentSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    required: [true, "Email is required"],
     unique: true,
     trim: true,
     lowercase: true,
-    match: [/^\S+@\S+\.\S+$/, "Please provide a valid email"],
+    match: [/^\S+@\S\.\S+$/, "Please provide a valid email"],
   },
+
+  roll: {
+    type: String,
+    unique: true,
+    trim: true,
+  },
+
   phone: {
     type: String,
     trim: true,
@@ -44,18 +40,11 @@ const studentSchema = new mongoose.Schema({
     type: Date,
     required: [true, "Admission date is required"],
   },
-  idCardIssued: {
-    type: Boolean,
-    default: false,
-  },
-  libraryCardIssued: {
-    type: Boolean,
-    default: false,
-  },
+
   status: {
     type: String,
-    enum: Object.values(STUDENT_STATUS),
-    default: STUDENT_STATUS.ACTIVE,
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
   },
   academicYear: {
     type: String,

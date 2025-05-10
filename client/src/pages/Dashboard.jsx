@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
@@ -32,6 +32,7 @@ const Dashboard = () => {
           {user?.role === "student" && "শিক্ষার্থী ড্যাশবোর্ড"}
           {user?.role === "teacher" && "শিক্ষক ড্যাশবোর্ড"}
           {user?.role === "admin" && "অ্যাডমিন ড্যাশবোর্ড"}
+          {user?.role === "superuser" && "সুপার ইউজার ড্যাশবোর্ড"}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {user?.role === "student" && (
@@ -40,7 +41,7 @@ const Dashboard = () => {
               <p className="text-gray-600 mb-4">আপনার রেজাল্ট শিট দেখুন।</p>
               <button
                 onClick={() => navigate("/results")}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                className="bg-blue-500 text-white -white px-4 py-2 rounded hover:bg-blue-600 transition"
               >
                 দেখুন
               </button>
@@ -74,7 +75,49 @@ const Dashboard = () => {
               </div>
             </>
           )}
-          {user?.role === "admin" && (
+          {["admin", "superuser"].includes(user?.role) && (
+            <>
+              <div className="bg-white p-6 rounded-lg shadow">
+                <h3 className="text-lg font-semibold mb-2">
+                  ডিপার্টমেন্ট তৈরি
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  নতুন ডিপার্টমেন্ট যোগ করুন।
+                </p>
+                <button
+                  onClick={() => navigate("/create-department")}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                >
+                  তৈরি করুন
+                </button>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow">
+                <h3 className="text-lg font-semibold mb-2">সাবজেক্ট তৈরি</h3>
+                <p className="text-gray-600 mb-4">নতুন সাবজেক্ট যোগ করুন।</p>
+                <button
+                  onClick={() => navigate("/create-subject")}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                >
+                  তৈরি করুন
+                </button>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow">
+                <h3 className="text-lg font-semibold mb-2">
+                  শিক্ষার্থী অনুমোদন
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  শিক্ষার্থীদের আবেদন অনুমোদন করুন।
+                </p>
+                <button
+                  onClick={() => navigate("/approve-student")}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                >
+                  অনুমোদন করুন
+                </button>
+              </div>
+            </>
+          )}
+          {user?.role === "superuser" && (
             <>
               <div className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-lg font-semibold mb-2">শিক্ষক তৈরি</h3>
@@ -87,15 +130,15 @@ const Dashboard = () => {
                 </button>
               </div>
               <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-semibold mb-2">
-                  রেজাল্ট পাবলিকেশন
-                </h3>
-                <p className="text-gray-600 mb-4">রেজাল্ট পাবলিশ করুন।</p>
+                <h3 className="text-lg font-semibold mb-2">অ্যাডমিন অনুমোদন</h3>
+                <p className="text-gray-600 mb-4">
+                  অ্যাডমিনদের আবেদন অনুমোদন করুন।
+                </p>
                 <button
-                  onClick={() => navigate("/publish-results")}
+                  onClick={() => navigate("/approve-admin")}
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
                 >
-                  পাবলিশ করুন
+                  অনুমোদন করুন
                 </button>
               </div>
             </>

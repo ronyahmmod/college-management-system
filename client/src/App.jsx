@@ -2,6 +2,12 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Attendance from "./pages/Attendance";
+import CreateDepartment from "./pages/CreateDepartment";
+import CreateSubject from "./pages/CreateSubject";
+import ApplyStudent from "./pages/ApplyStudent";
+import ApproveStudent from "./pages/ApproveStudent";
+import ApproveAdmin from "./pages/ApproveAdmin";
 import { useContext } from "react";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -27,15 +33,58 @@ const App = () => {
     <AuthProvider>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/apply-student" element={<ApplyStudent />} />
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute allowedRoles={["student", "teacher", "admin"]}>
+            <ProtectedRoute
+              allowedRoles={["student", "teacher", "admin", "superuser"]}
+            >
               <Dashboard />
             </ProtectedRoute>
           }
         />
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route
+          path="/attendance"
+          element={
+            <ProtectedRoute allowedRoles={["teacher"]}>
+              <Attendance />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-department"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "superuser"]}>
+              <CreateDepartment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-subject"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "superuser"]}>
+              <CreateSubject />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/approve-student"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "superuser"]}>
+              <ApproveStudent />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/approve-admin"
+          element={
+            <ProtectedRoute allowedRoles={["superuser"]}>
+              <ApproveAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/" element={<Navigate to="/apply-student" />} />
       </Routes>
     </AuthProvider>
   );

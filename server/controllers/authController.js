@@ -91,4 +91,22 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    return res.status(200).json({
+      user: {
+        email: user.email,
+        role: user.role,
+        referenceId: user.referenceId,
+      },
+    });
+  } catch (errro) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports = { register, login, getMe };

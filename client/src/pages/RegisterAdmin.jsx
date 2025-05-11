@@ -1,15 +1,13 @@
-import { useState, useContext } from "react";
-// import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
 
-const CreateDepartment = () => {
-  const { user } = useContext(AuthContext);
-  //   const navigate = useNavigate();
+const RegisterAdmin = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
-    code: "",
-    description: "",
+    email: "",
+    password: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -21,36 +19,29 @@ const CreateDepartment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/departments", formData);
-      setSuccess("ডিপার্টমেন্ট সফলভাবে তৈরি হয়েছে");
+      await api.post("/admins/register", formData);
+      setSuccess("অ্যাডমিন রেজিস্ট্রেশন সফল। অনুমোদনের জন্য অপেক্ষা করুন।");
       setError("");
-      setFormData({ name: "", code: "", description: "" });
+      setFormData({ name: "", email: "", password: "" });
+      setTimeout(() => navigate("/login"), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || "ডিপার্টমেন্ট তৈরি ব্যর্থ");
+      setError(err.response?.data?.message || "রেজিস্ট্রেশন ব্যর্থ");
       setSuccess("");
     }
   };
-
-  if (!["admin", "superuser"].includes(user?.role)) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        অ্যাক্সেস নিষিদ্ধ
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
         <h2 className="text-2xl font-bold mb-6 text-center">
-          ডিপার্টমেন্ট তৈরি করুন
+          অ্যাডমিন রেজিস্ট্রেশন
         </h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {success && <p className="text-green-500 mb-4">{success}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 mb-2" htmlFor="name">
-              ডিপার্টমেন্টের নাম
+              নাম
             </label>
             <input
               type="text"
@@ -62,29 +53,29 @@ const CreateDepartment = () => {
               required
             />
           </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 mb-2" htmlFor="code">
-              ডিপার্টমেন্ট কোড
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2" htmlFor="email">
+              ইমেইল
             </label>
             <input
-              type="text"
-              id="code"
-              name="code"
-              value={formData.code}
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 mb-2" htmlFor="code">
-              ডিপার্টমেন্ট বর্ণনা
+            <label className="block text-gray-700 mb-2" htmlFor="password">
+              পাসওয়ার্ড
             </label>
             <input
-              type="text"
-              id="description"
-              name="description"
-              value={formData.description}
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
               onChange={handleChange}
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
@@ -94,7 +85,7 @@ const CreateDepartment = () => {
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
           >
-            তৈরি করুন
+            রেজিস্টার করুন
           </button>
         </form>
       </div>
@@ -102,4 +93,4 @@ const CreateDepartment = () => {
   );
 };
 
-export default CreateDepartment;
+export default RegisterAdmin;

@@ -104,7 +104,7 @@ const getMe = async (req, res) => {
         referenceId: user.referenceId,
       },
     });
-  } catch (errro) {
+  } catch (error) {
     return res.status(400).json({ message: error.message });
   }
 };

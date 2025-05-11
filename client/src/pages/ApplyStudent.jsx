@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
 
@@ -9,11 +9,23 @@ const ApplyStudent = () => {
     email: "",
     phone: "",
     department: "",
-    academicYear: "",
     password: "",
   });
+  const [departments, setDepartments] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await api.get("/departments");
+        setDepartments(response.data.departments);
+      } catch (err) {
+        setError(err.response?.data?.message || "ডিপার্টমেন্ট লোড ব্যর্থ");
+      }
+    };
+    fetchDepartments();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,7 +42,6 @@ const ApplyStudent = () => {
         email: "",
         phone: "",
         department: "",
-        academicYear: "",
         password: "",
       });
       setTimeout(() => navigate("/login"), 3000);
@@ -93,31 +104,23 @@ const ApplyStudent = () => {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 mb-2" htmlFor="department">
-              ডিপার্টমেন্ট আইডি
+              ডিপার্টমেন্ট
             </label>
-            <input
-              type="text"
+            <select
               id="department"
               name="department"
               value={formData.department}
               onChange={handleChange}
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="department">
-              শিক্ষাবর্ষ (আকাডেমিক ইয়ার)
-            </label>
-            <input
-              type="text"
-              id="academicYear"
-              name="academicYear"
-              value={formData.academicYear}
-              onChange={handleChange}
-              className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            >
+              <option value="">ডিপার্টমেন্ট নির্বাচন করুন</option>
+              {departments.map((dept) => (
+                <option key={dept._id} value={dept._id}>
+                  {dept.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="mb-6">
             <label className="block text-gray-700 mb-2" htmlFor="password">

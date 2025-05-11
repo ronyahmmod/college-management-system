@@ -26,6 +26,9 @@ app.use("/api/results", require("./routes/results"));
 app.use("/api/teachers", require("./routes/teachers"));
 app.use("/api/attendances", require("./routes/attendances"));
 app.use("/api/result-publications", require("./routes/resultPublications"));
+app.use("/api/departments", require("./routes/departments"));
+app.use("/api/subjects", require("./routes/subjects"));
+app.use("/api/admins", require("./routes/admins"));
 
 // API helth check
 app.get("/api-health", (req, res) => {

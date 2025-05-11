@@ -13,6 +13,11 @@ const departmentSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
+  description: {
+    type: String,
+    required: [true, "Description is required"],
+    trim: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

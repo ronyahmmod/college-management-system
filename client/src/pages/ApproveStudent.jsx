@@ -5,9 +5,10 @@ import api from "../utils/api";
 const ApproveStudent = () => {
   const { user } = useContext(AuthContext);
   const [students, setStudents] = useState([]);
+  const [subjects, setSubjects] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [formData, setFormData] = useState({ roll: "", subjects: "" });
+  const [formData, setFormData] = useState({ roll: "", subjects: [] });
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -18,7 +19,16 @@ const ApproveStudent = () => {
         setError(err.response?.data?.message || "শিক্ষার্থী লোড ব্যর্থ");
       }
     };
+    const fetchSubjects = async () => {
+      try {
+        const response = await api.get("/subjects");
+        setSubjects(response.data.subjects);
+      } catch (err) {
+        setError(err.response?.data?.message || "সাবজেক্ট লোড ব্যর্থ");
+      }
+    };
     fetchStudents();
+    fetchSubjects();
   }, []);
 
   const handleApprove = async (studentId, status) => {
@@ -39,14 +49,13 @@ const ApproveStudent = () => {
 
   const handleAssign = async (studentId) => {
     try {
-      const subjects = formData.subjects.split(",").map((s) => s.trim());
       await api.post(`/students/assign/${studentId}`, {
         roll: formData.roll,
-        subjects,
+        subjects: formData.subjects,
       });
       setSuccess("রোল এবং সাবজেক্ট অ্যাসাইন করা হয়েছে");
       setError("");
-      setFormData({ roll: "", subjects: "" });
+      setFormData({ roll: "", subjects: [] });
       setStudents(students.filter((student) => student._id !== studentId));
     } catch (err) {
       setError(err.response?.data?.message || "অ্যাসাইন ব্যর্থ");
@@ -56,6 +65,17 @@ const ApproveStudent = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubjectChange = (e) => {
+    const options = e.target.options;
+    const selected = [];
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected) {
+        selected.push(options[i].value);
+      }
+    }
+    setFormData({ ...formData, subjects: selected });
   };
 
   if (!["admin", "superuser"].includes(user?.role)) {
@@ -125,17 +145,23 @@ const ApproveStudent = () => {
                         className="block text-gray-700 mb-2"
                         htmlFor={`subjects-${student._id}`}
                       >
-                        সাবজেক্ট আইডি (কমা দিয়ে আলাদা করুন)
+                        সাবজেক্ট নির্বাচন করুন
                       </label>
-                      <input
-                        type="text"
+                      <select
+                        multiple
                         id={`subjects-${student._id}`}
                         name="subjects"
                         value={formData.subjects}
-                        onChange={handleChange}
+                        onChange={handleSubjectChange}
                         className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
-                      />
+                      >
+                        {subjects.map((subject) => (
+                          <option key={subject._id} value={subject._id}>
+                            {subject.name} ({subject.code})
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <button
                       onClick={() => handleAssign(student._id)}

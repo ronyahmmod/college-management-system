@@ -8,6 +8,11 @@ import CreateSubject from "./pages/CreateSubject";
 import ApplyStudent from "./pages/ApplyStudent";
 import ApproveStudent from "./pages/ApproveStudent";
 import ApproveAdmin from "./pages/ApproveAdmin";
+import RegisterAdmin from "./pages/RegisterAdmin";
+import DepartmentList from "./pages/DepartmentList";
+import SubjectList from "./pages/SubjectList";
+import TeacherList from "./pages/TeacherList";
+import CreateTeacher from "./pages/CreateTeacher";
 import { useContext } from "react";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -34,6 +39,7 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/apply-student" element={<ApplyStudent />} />
+        <Route path="/register-admin" element={<RegisterAdmin />} />
         <Route
           path="/dashboard"
           element={
@@ -81,6 +87,38 @@ const App = () => {
           element={
             <ProtectedRoute allowedRoles={["superuser"]}>
               <ApproveAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/department-list"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "superuser"]}>
+              <DepartmentList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/subject-list"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "superuser"]}>
+              <SubjectList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-teacher"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "superuser"]}>
+              <CreateTeacher />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/teacher-list"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "superuser"]}>
+              <TeacherList />
             </ProtectedRoute>
           }
         />

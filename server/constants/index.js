@@ -62,6 +62,6 @@ module.exports = {
     STUDENT: "student",
     TEACHER: "teacher",
     ADMIN: "admin",
-    SUPERADMIN: "superadmin",
+    SUPERADMIN: "superuser",
   },
 };
